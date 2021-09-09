@@ -42,5 +42,16 @@ class SaleOrder(models.Model):
             if product.pack_ok and product.pack_component_price == 'detailed':
                 context['fixed_price'] = True
         self.env.context = context
-        return super()._cart_update(
+        res = super()._cart_update(
             product_id, line_id, add_qty, set_qty, **kwargs)
+
+        if res["quantity"] != 0:
+            if (
+                    order_line
+                    and order_line.pack_parent_line_id
+                    and order_line.pack_parent_line_id.pack_component_price in
+                    ['ignored', 'totalized']
+            ):
+                order_line.write({'price_unit': 0})
+
+        return res
