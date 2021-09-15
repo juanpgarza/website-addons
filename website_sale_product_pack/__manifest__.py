@@ -30,6 +30,6 @@
         'website_sale',
     ],
     'data': [
-        # 'templates/website_sale_template.xml'
+        'templates/website_sale_template.xml'
     ],
 }
